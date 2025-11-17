@@ -1,3 +1,4 @@
+#pragma once
 #include <string>
 #include "../json.hpp"
 
@@ -14,7 +15,7 @@ public:
   // Constructors
   User() : username(""), password("") {}
 
-  User(const string &username, const string &password))
+  User(const string &username, const string &password)
       : username(username), password(password) {}
 
   // Getters

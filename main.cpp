@@ -1,15 +1,14 @@
-#include "modules/AuthManager.h"
-#include "modules/FileHandler.h"
-#include "modules/Transaction.h"
-#include "modules/TransactionManager.h"
-#include "modules/User.h"
+#include <windows.h> // For Windows console functions - must be FIRST
 #include <conio.h> // For _getch() on Windows
 #include <iomanip>
 #include <iostream>
 #include <string>
 #include <vector>
-#include <windows.h> // For Windows console functions
-
+#include "modules/AuthManager.h"
+#include "modules/FileHandler.h"
+#include "modules/Transaction.h"
+#include "modules/TransactionManager.h"
+#include "modules/User.h"
 
 using namespace std;
 
@@ -17,18 +16,21 @@ using namespace std;
 void clearScreen() { system("cls"); }
 
 // Function to set console color (Windows)
-void setColor(int color) {
+void setColor(int color)
+{
   HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
   SetConsoleTextAttribute(hConsole, color);
 }
 
 // Function to reset console color
-void resetColor() {
+void resetColor()
+{
   setColor(7); // White
 }
 
 // Function to draw boxed title
-void drawBoxedTitle(const string &title) {
+void drawBoxedTitle(const string &title)
+{
   int width = title.length() + 4;
   cout << "+";
   for (int i = 0; i < width - 2; i++)
@@ -42,22 +44,30 @@ void drawBoxedTitle(const string &title) {
 }
 
 // Function to get password input (masked)
-string getPasswordInput() {
+string getPasswordInput()
+{
   string password = "";
   char ch;
 
-  while (true) {
+  while (true)
+  {
     ch = _getch();
 
-    if (ch == '\r' || ch == '\n') { // Enter key
+    if (ch == '\r' || ch == '\n')
+    { // Enter key
       cout << endl;
       break;
-    } else if (ch == '\b' || ch == 127) { // Backspace
-      if (password.length() > 0) {
+    }
+    else if (ch == '\b' || ch == 127)
+    { // Backspace
+      if (password.length() > 0)
+      {
         password.pop_back();
         cout << "\b \b";
       }
-    } else {
+    }
+    else
+    {
       password += ch;
       cout << "*";
     }
@@ -67,22 +77,28 @@ string getPasswordInput() {
 }
 
 // Function to get regular input
-string getInput() {
+string getInput()
+{
   string input;
   getline(cin, input);
   // Clear any remaining newline
-  if (input.empty() && cin.peek() == '\n') {
+  if (input.empty() && cin.peek() == '\n')
+  {
     cin.ignore();
   }
   return input;
 }
 
 // Function to get double input
-double getDoubleInput() {
+double getDoubleInput()
+{
   string input = getInput();
-  try {
+  try
+  {
     return stod(input);
-  } catch (...) {
+  }
+  catch (...)
+  {
     return -1.0; // Invalid input
   }
 }
@@ -93,7 +109,8 @@ void showViewTransactionsScreen();
 void showAddTransactionScreen();
 
 // Setup Screen
-void showSetupScreen() {
+void showSetupScreen()
+{
   clearScreen();
 
   // Boxed title
@@ -123,7 +140,8 @@ void showSetupScreen() {
   cout << endl;
 
   // Try to setup user
-  if (AuthManager::setupUser(username, password, confirmPassword)) {
+  if (AuthManager::setupUser(username, password, confirmPassword))
+  {
     // Success message
     setColor(10); // Green
     cout << "✓ Profile created successfully!" << endl;
@@ -153,7 +171,9 @@ void showSetupScreen() {
 
     // Navigate to main menu
     showMainMenu();
-  } else {
+  }
+  else
+  {
     // Password mismatch
     setColor(12); // Red
     cout << "✗ Passwords do not match. Please try again." << endl;
@@ -166,7 +186,8 @@ void showSetupScreen() {
 }
 
 // Login Screen
-void showLoginScreen() {
+void showLoginScreen()
+{
   clearScreen();
 
   // Boxed title
@@ -188,7 +209,8 @@ void showLoginScreen() {
   cout << endl;
 
   // Try to login
-  if (AuthManager::login(password)) {
+  if (AuthManager::login(password))
+  {
     // Success message
     setColor(10); // Green
     cout << "✓ Login successful. Loading your dashboard..." << endl;
@@ -199,7 +221,9 @@ void showLoginScreen() {
 
     // Navigate to main menu
     showMainMenu();
-  } else {
+  }
+  else
+  {
     // Failed login
     setColor(12); // Red
     cout << "✗ Invalid password. Please try again." << endl;
@@ -212,7 +236,8 @@ void showLoginScreen() {
 }
 
 // View Transactions Screen
-void showViewTransactionsScreen() {
+void showViewTransactionsScreen()
+{
   clearScreen();
 
   drawBoxedTitle("View Transactions");
@@ -220,18 +245,25 @@ void showViewTransactionsScreen() {
 
   vector<Transaction> transactions = TransactionManager::getAllTransactions();
 
-  if (transactions.empty()) {
+  if (transactions.empty())
+  {
     cout << "No transactions found." << endl;
     cout << endl;
-  } else {
+  }
+  else
+  {
     // Display transactions in reverse order (newest first)
-    for (int i = transactions.size() - 1; i >= 0; i--) {
+    for (int i = transactions.size() - 1; i >= 0; i--)
+    {
       const Transaction &t = transactions[i];
 
       // Color based on type
-      if (t.getType() == "income") {
+      if (t.getType() == "income")
+      {
         setColor(10); // Green for income
-      } else {
+      }
+      else
+      {
         setColor(12); // Red for expense
       }
 
@@ -240,10 +272,13 @@ void showViewTransactionsScreen() {
 
       cout << t.getDate() << " - ";
 
-      if (t.getType() == "income") {
+      if (t.getType() == "income")
+      {
         setColor(10);
         cout << "+$";
-      } else {
+      }
+      else
+      {
         setColor(12);
         cout << "-$";
       }
@@ -270,9 +305,12 @@ void showViewTransactionsScreen() {
          << endl;
     resetColor();
     cout << "Balance: $";
-    if (balance >= 0) {
+    if (balance >= 0)
+    {
       setColor(10);
-    } else {
+    }
+    else
+    {
       setColor(12);
     }
     cout << fixed << setprecision(2) << balance << endl;
@@ -291,7 +329,8 @@ void showViewTransactionsScreen() {
 }
 
 // Add Transaction Screen
-void showAddTransactionScreen() {
+void showAddTransactionScreen()
+{
   clearScreen();
 
   drawBoxedTitle("Add Transaction");
@@ -312,11 +351,16 @@ void showAddTransactionScreen() {
   int choice = (choiceStr == "1" || choiceStr == "2") ? stoi(choiceStr) : 0;
 
   string type;
-  if (choice == 1) {
+  if (choice == 1)
+  {
     type = "expense";
-  } else if (choice == 2) {
+  }
+  else if (choice == 2)
+  {
     type = "income";
-  } else {
+  }
+  else
+  {
     setColor(12);
     cout << "✗ Invalid choice." << endl;
     resetColor();
@@ -330,7 +374,8 @@ void showAddTransactionScreen() {
   // Get amount
   cout << "Amount: $";
   double amount = getDoubleInput();
-  if (amount <= 0) {
+  if (amount <= 0)
+  {
     setColor(12);
     cout << "✗ Invalid amount." << endl;
     resetColor();
@@ -344,7 +389,8 @@ void showAddTransactionScreen() {
   // Get description
   cout << "Description: ";
   string description = getInput();
-  if (description.empty()) {
+  if (description.empty())
+  {
     setColor(12);
     cout << "✗ Description cannot be empty." << endl;
     resetColor();
@@ -358,25 +404,32 @@ void showAddTransactionScreen() {
   // Optional note
   cout << "Note (optional): ";
   string note = getInput();
-  if (!note.empty()) {
+  if (!note.empty())
+  {
     description += " - " + note;
   }
 
   cout << endl;
 
   // Add transaction
-  if (TransactionManager::addTransaction(type, amount, description)) {
+  if (TransactionManager::addTransaction(type, amount, description))
+  {
     setColor(10);
     cout << "✓ ";
-    if (type == "income") {
+    if (type == "income")
+    {
       cout << "Income";
-    } else {
+    }
+    else
+    {
       cout << "Expense";
     }
     cout << " added successfully!" << endl;
     resetColor();
     cout << endl;
-  } else {
+  }
+  else
+  {
     setColor(12);
     cout << "✗ Failed to add transaction." << endl;
     resetColor();
@@ -394,7 +447,8 @@ void showAddTransactionScreen() {
 }
 
 // Main Menu Screen
-void showMainMenu() {
+void showMainMenu()
+{
   clearScreen();
 
   drawBoxedTitle("AI Expense • Dashboard");
@@ -406,9 +460,12 @@ void showMainMenu() {
   double totalExpenses = TransactionManager::getTotalExpenses();
 
   cout << "💰 Balance: $";
-  if (balance >= 0) {
+  if (balance >= 0)
+  {
     setColor(10);
-  } else {
+  }
+  else
+  {
     setColor(12);
   }
   cout << fixed << setprecision(2) << balance << endl;
@@ -437,15 +494,22 @@ void showMainMenu() {
 
   string command = getInput();
 
-  if (command == "t" || command == "T" || command == "transact") {
+  if (command == "t" || command == "T" || command == "transact")
+  {
     showAddTransactionScreen();
-  } else if (command == "v" || command == "V" || command == "view") {
+  }
+  else if (command == "v" || command == "V" || command == "view")
+  {
     showViewTransactionsScreen();
-  } else if (command == "q" || command == "Q" || command == "quit") {
+  }
+  else if (command == "q" || command == "Q" || command == "quit")
+  {
     clearScreen();
     cout << "Thank you for using AI Expense Manager!" << endl;
     exit(0);
-  } else {
+  }
+  else
+  {
     cout << "Invalid command. Press ENTER to continue..." << endl;
     cin.get();
     showMainMenu();
@@ -453,16 +517,21 @@ void showMainMenu() {
 }
 
 // Main function
-int main() {
-  // Ensure data directory exists
-  FileHandler::ensureDataDirectory();
+int main()
+{
+  cout << "Starting AI Expense Manager...\n";
+  // FileHandler::ensureDataDirectory();
 
-  // Check if first time or returning user
-  if (AuthManager::isFirstTime()) {
-    showSetupScreen();
-  } else {
-    showLoginScreen();
-  }
+  // if (AuthManager::isFirstTime())
+  // {
+  //   cout << "User is coming first time";
+  //   showSetupScreen();
+  // }
+  // else
+  // {
+  //   cout << "User aint first time";
+  //   showLoginScreen();
+  // }
 
   // After successful authentication, dashboard will be shown
   // (to be implemented next)

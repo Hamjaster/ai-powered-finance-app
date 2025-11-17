@@ -1,4 +1,5 @@
-#include "../nlohmann/json.hpp"
+#pragma once
+#include "../json.hpp"
 #include "Transaction.h"
 #include "User.h"
 #include <direct.h> // _mkdir
@@ -12,7 +13,8 @@
 using json = nlohmann::json;
 using namespace std;
 
-class FileHandler {
+class FileHandler
+{
 public:
   // Folder + file paths
   static inline const string DATA_DIR = "data";
@@ -20,24 +22,29 @@ public:
   static inline const string TRANSACTIONS_FILE = "data/transactions.json";
 
   // Create /data directory if missing
-  static void ensureDataDirectory() {
+  static void ensureDataDirectory()
+  {
     // _access(path, mode). mode = 0 just checks for existence. returns 0 if
     // exists, -1 if not.
-    if (_access(DATA_DIR.c_str(), 0) != 0) {
+    if (_access(DATA_DIR.c_str(), 0) != 0)
+    {
       _mkdir(DATA_DIR.c_str());
     }
   }
 
   // Check if user.json exists
-  static bool userFileExists() {
+  static bool userFileExists()
+  {
     ifstream file(USER_FILE);
     return file.good();
   }
 
   // Read user from JSON file
-  static User readUserFromFile() {
+  static User readUserFromFile()
+  {
     ifstream file(USER_FILE);
-    if (!file.is_open()) {
+    if (!file.is_open())
+    {
       return User(); // Return empty user
     }
 
@@ -50,9 +57,11 @@ public:
   }
 
   // Write user to file
-  static void writeUserToFile(const User &user) {
+  static void writeUserToFile(const User &user)
+  {
     ofstream file(USER_FILE);
-    if (!file.is_open()) {
+    if (!file.is_open())
+    {
       cerr << "Error: Could not write to user file.\n";
       return;
     }
@@ -64,11 +73,13 @@ public:
   // -------- Transaction File Operations --------
 
   // Read all transactions from file
-  static vector<Transaction> readTransactionsFromFile() {
+  static vector<Transaction> readTransactionsFromFile()
+  {
     vector<Transaction> transactions;
     ifstream file(TRANSACTIONS_FILE);
 
-    if (!file.is_open()) {
+    if (!file.is_open())
+    {
       return transactions; // Return empty vector if file doesn't exist
     }
 
@@ -77,18 +88,24 @@ public:
     string jsonContent = buffer.str();
     file.close();
 
-    if (jsonContent.empty()) {
+    if (jsonContent.empty())
+    {
       return transactions;
     }
 
-    try {
+    try
+    {
       json j = json::parse(jsonContent);
-      if (j.contains("transactions") && j["transactions"].is_array()) {
-        for (const auto &item : j["transactions"]) {
+      if (j.contains("transactions") && j["transactions"].is_array())
+      {
+        for (const auto &item : j["transactions"])
+        {
           transactions.push_back(Transaction::fromJson(item));
         }
       }
-    } catch (const exception &e) {
+    }
+    catch (const exception &e)
+    {
       cerr << "Error parsing transactions file: " << e.what() << "\n";
     }
 
@@ -96,9 +113,11 @@ public:
   }
 
   // Write all transactions to file
-  static void writeTransactionsToFile(const vector<Transaction> &transactions) {
+  static void writeTransactionsToFile(const vector<Transaction> &transactions)
+  {
     ofstream file(TRANSACTIONS_FILE);
-    if (!file.is_open()) {
+    if (!file.is_open())
+    {
       cerr << "Error: Could not write to transactions file.\n";
       return;
     }
@@ -106,7 +125,8 @@ public:
     json j;
     j["transactions"] = json::array();
 
-    for (const auto &transaction : transactions) {
+    for (const auto &transaction : transactions)
+    {
       j["transactions"].push_back(transaction.toJson());
     }
 

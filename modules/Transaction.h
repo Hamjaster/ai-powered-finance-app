@@ -1,12 +1,13 @@
+#pragma once
 #include "../json.hpp"
 #include <ctime>
 #include <string>
 
-
 using json = nlohmann::json;
 using namespace std;
 
-class Transaction {
+class Transaction
+{
 private:
   int id;
   double amount;
@@ -19,7 +20,8 @@ public:
   Transaction() : id(0), type(""), amount(0.0), description(""), date("") {}
 
   Transaction(const string &type, double amount, const string &description)
-      : id(0), type(type), amount(amount), description(description), date("") {
+      : id(0), type(type), amount(amount), description(description), date("")
+  {
     this->date = generateCurrentDate();
   }
 
@@ -39,13 +41,15 @@ public:
   void setId(int id) { this->id = id; }
   void setType(const string &type) { this->type = type; }
   void setAmount(double amount) { this->amount = amount; }
-  void setDescription(const string &description) {
+  void setDescription(const string &description)
+  {
     this->description = description;
   }
   void setDate(const string &date) { this->date = date; }
 
   // Generate current date in format "15 Nov, 25"
-  static string generateCurrentDate() {
+  static string generateCurrentDate()
+  {
     time_t now = time(0);
     tm *timeinfo = localtime(&now);
 
@@ -62,7 +66,8 @@ public:
   }
 
   // JSON conversion
-  json toJson() const {
+  json toJson() const
+  {
     json j;
     j["id"] = id;
     j["type"] = type;
@@ -72,7 +77,8 @@ public:
     return j;
   }
 
-  static Transaction fromJson(const json &j) {
+  static Transaction fromJson(const json &j)
+  {
     Transaction t;
     t.id = j.value("id", 0);
     t.type = j.value("type", "");

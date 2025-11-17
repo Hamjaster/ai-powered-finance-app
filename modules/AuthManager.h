@@ -1,3 +1,4 @@
+#pragma once
 #include "User.h"
 #include "FileHandler.h"
 using namespace std;
