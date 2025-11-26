@@ -26,8 +26,6 @@ public:
   void setUsername(const string &username) { this->username = username; }
   void setPassword(const string &password) { this->password = password; }
 
-  // -------- JSON Conversion (same API, but clean) --------
-
   string toJson() const
   {
     json j;
@@ -43,7 +41,6 @@ public:
     User user;
     user.username = j.value("username", "");
     user.password = j.value("password", "");
-
     return user;
   }
 };

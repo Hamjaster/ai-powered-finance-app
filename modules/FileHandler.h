@@ -24,8 +24,6 @@ public:
   // Create /data directory if missing
   static void ensureDataDirectory()
   {
-    // _access(path, mode). mode = 0 just checks for existence. returns 0 if
-    // exists, -1 if not.
     if (_access(DATA_DIR.c_str(), 0) != 0)
     {
       _mkdir(DATA_DIR.c_str());
@@ -42,18 +40,21 @@ public:
   // Read user from JSON file
   static User readUserFromFile()
   {
-    ifstream file(USER_FILE);
+    ifstream file(USER_FILE); // input from "data/user.json"
     if (!file.is_open())
     {
+      cout << "check file open, if no return user obj";
       return User(); // Return empty user
     }
-
     stringstream buffer;
     buffer << file.rdbuf();
+    // buffer = 94054309
     string jsonContent = buffer.str();
+    // jsonContent = username=hamza, password=hamza1122
 
     file.close();
     return User::fromJson(jsonContent);
+    // return {username : "hamza", password = "hamza1122"}
   }
 
   // Write user to file
@@ -103,6 +104,7 @@ public:
           transactions.push_back(Transaction::fromJson(item));
         }
       }
+      // transactions<vector> = { { id, name, type, amount, date}, {}, {}, {} }
     }
     catch (const exception &e)
     {
@@ -115,13 +117,15 @@ public:
   // Write all transactions to file
   static void writeTransactionsToFile(const vector<Transaction> &transactions)
   {
+
     ofstream file(TRANSACTIONS_FILE);
     if (!file.is_open())
     {
       cerr << "Error: Could not write to transactions file.\n";
       return;
     }
-
+    // input : transactions<vector>
+    // {"transactions" = []}
     json j;
     j["transactions"] = json::array();
 

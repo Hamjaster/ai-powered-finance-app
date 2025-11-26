@@ -1,0 +1,8 @@
+#pragma once
+
+void showSetupScreen();
+void showLoginScreen();
+void showViewTransactionsScreen();
+void showAddTransactionScreen();
+void showMainMenu();
+
