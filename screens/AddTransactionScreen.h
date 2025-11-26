@@ -7,37 +7,47 @@
 #include "ScreenRoutes.h"
 #include "ScreenUtils.h"
 
-inline void showAddTransactionScreen()
-{
+inline void showAddTransactionScreen() {
   clearScreen();
 
   drawBoxedTitle("Add Transaction");
   std::cout << std::endl;
 
-  std::cout << "Type: ";
+  drawSeparator();
+  std::cout << "  Select Type:" << std::endl;
+  std::cout << "  ";
   setColor(12);
-  std::cout << "(1) Expense";
+  std::cout << "[1] Expense";
   resetColor();
-  std::cout << " ";
+  std::cout << "   ";
   setColor(10);
-  std::cout << "(2) Income";
+  std::cout << "[2] Income";
   resetColor();
-  std::cout << std::endl;
-  std::cout << "Choice: ";
+  std::cout << "   ";
+  setColor(11);
+  std::cout << "[3] AI Assistant";
+  resetColor();
+  std::cout << std::endl << std::endl;
+
+  std::cout << "  Choice: ";
   std::string choiceStr = getInput();
-  int choice = (choiceStr == "1" || choiceStr == "2") ? std::stoi(choiceStr) : 0;
+
+  int choice = 0;
+  try {
+    choice = std::stoi(choiceStr);
+  } catch (...) {
+    choice = 0;
+  }
 
   std::string type;
-  if (choice == 1)
-  {
+  if (choice == 1) {
     type = "expense";
-  }
-  else if (choice == 2)
-  {
+  } else if (choice == 2) {
     type = "income";
-  }
-  else
-  {
+  } else if (choice == 3) {
+    showAIScreen();
+    return;
+  } else {
     setColor(12);
     std::cout << "✗ Invalid choice." << std::endl;
     resetColor();
@@ -48,10 +58,9 @@ inline void showAddTransactionScreen()
     return;
   }
 
-  std::cout << "Amount: $";
+  std::cout << "  Amount: $";
   double amount = getDoubleInput();
-  if (amount <= 0)
-  {
+  if (amount <= 0) {
     setColor(12);
     std::cout << "✗ Invalid amount." << std::endl;
     resetColor();
@@ -62,10 +71,9 @@ inline void showAddTransactionScreen()
     return;
   }
 
-  std::cout << "Description: ";
+  std::cout << "  Description: ";
   std::string description = getInput();
-  if (description.empty())
-  {
+  if (description.empty()) {
     setColor(12);
     std::cout << "✗ Description cannot be empty." << std::endl;
     resetColor();
@@ -76,33 +84,26 @@ inline void showAddTransactionScreen()
     return;
   }
 
-  std::cout << "Note (optional): ";
+  std::cout << "  Note (optional): ";
   std::string note = getInput();
-  if (!note.empty())
-  {
+  if (!note.empty()) {
     description += " - " + note;
   }
 
   std::cout << std::endl;
 
-  if (TransactionManager::addTransaction(type, amount, description))
-  {
+  if (TransactionManager::addTransaction(type, amount, description)) {
     setColor(10);
     std::cout << "✓ ";
-    if (type == "income")
-    {
+    if (type == "income") {
       std::cout << "Income";
-    }
-    else
-    {
+    } else {
       std::cout << "Expense";
     }
     std::cout << " added successfully!" << std::endl;
     resetColor();
     std::cout << std::endl;
-  }
-  else
-  {
+  } else {
     setColor(12);
     std::cout << "✗ Failed to add transaction." << std::endl;
     resetColor();
@@ -118,4 +119,3 @@ inline void showAddTransactionScreen()
   std::cin.get();
   showMainMenu();
 }
-

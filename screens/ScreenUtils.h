@@ -7,7 +7,6 @@
 #include <string>
 #include <windows.h> // Must be included before other Windows-dependent headers
 
-
 inline void clearScreen() { std::system("cls"); }
 
 inline void setColor(int color) {
@@ -28,6 +27,10 @@ inline void drawBoxedTitle(const std::string &title) {
   for (int i = 0; i < width - 2; i++)
     std::cout << "-";
   std::cout << "+\n";
+}
+
+inline void drawSeparator() {
+  std::cout << "----------------------------------------" << std::endl;
 }
 
 inline std::string getPasswordInput() {
