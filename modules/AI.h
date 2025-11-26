@@ -11,7 +11,6 @@
 #include <string>
 #include <vector>
 
-
 using json = nlohmann::json;
 
 class AIModule {
@@ -20,7 +19,7 @@ public:
                           json &conversation_history) {
     const std::string api_key =
         "sk-or-v1-"
-        "3180f57e5c5592a15f18489202b48355dc3b6af08a350c0758ea5263639baa85";
+        "338cd2242baa61a1b2ea72f4fcc373c98e96328906c5ea6634cc6017df87c01f";
 
     // Add user message to history
     conversation_history.push_back({{"role", "user"}, {"content", user_input}});

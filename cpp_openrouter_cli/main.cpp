@@ -9,7 +9,6 @@
 #include <string>
 #include <vector>
 
-
 using json = nlohmann::json;
 
 // Helper function to execute shell command and get output
@@ -44,7 +43,7 @@ std::string escape_json_for_cmd(const std::string &json_str) {
 int main() {
   const std::string api_key =
       "sk-or-v1-"
-      "32209d7d4240691a337f8f413575d928b96e11a192b96dee118913ce78b3a5fb";
+      "338cd2242baa61a1b2ea72f4fcc373c98e96328906c5ea6634cc6017df87c01f";
 
   json conversation_history = json::array();
 
