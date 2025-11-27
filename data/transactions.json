@@ -20,6 +20,13 @@
             "description": "donut - needed food",
             "id": 3,
             "type": "expense"
+        },
+        {
+            "amount": 500.0,
+            "date": "27 Nov, 25",
+            "description": "Bought a vibrator - No",
+            "id": 4,
+            "type": "expense"
         }
     ]
 }
