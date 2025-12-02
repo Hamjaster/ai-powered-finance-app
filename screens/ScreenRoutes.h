@@ -6,3 +6,4 @@ void showViewTransactionsScreen();
 void showAddTransactionScreen();
 void showMainMenu();
 void showAIScreen();
+void showGraphsScreen();

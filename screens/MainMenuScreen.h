@@ -285,6 +285,11 @@ inline void showMainMenu() {
   std::cout << "eports ";
   
   setColor(11);
+  std::cout << "[g]";
+  resetColor();
+  std::cout << "raphs ";
+  
+  setColor(11);
   std::cout << "[a]";
   resetColor();
   std::cout << "i-insights ";
@@ -325,6 +330,8 @@ inline void showMainMenu() {
   } else if (command == "a" || command == "A" || command == "ai" || 
              command == "c" || command == "C" || command == "chat") {
     showAIScreen();
+  } else if (command == "g" || command == "G" || command == "graphs") {
+    showGraphsScreen();
   } else if (command == "s" || command == "S" || command == "settings") {
     // Settings screen - for now just show message
     std::cout << "Settings feature coming soon. Press ENTER to continue..." << std::endl;
