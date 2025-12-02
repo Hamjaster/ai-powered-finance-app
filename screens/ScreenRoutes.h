@@ -7,3 +7,5 @@ void showAddTransactionScreen();
 void showMainMenu();
 void showAIScreen();
 void showGraphsScreen();
+void showExportScreen();
+void showSearchScreen();

@@ -290,24 +290,24 @@ inline void showMainMenu() {
   std::cout << "raphs ";
   
   setColor(11);
-  std::cout << "[a]";
-  resetColor();
-  std::cout << "i-insights ";
-  
-  setColor(11);
-  std::cout << "[c]";
-  resetColor();
-  std::cout << "hat ";
-  
-  setColor(11);
-  std::cout << "[s]";
-  resetColor();
-  std::cout << "ettings ";
-  
-  setColor(11);
   std::cout << "[/]";
   resetColor();
-  std::cout << " search" << std::endl;
+  std::cout << "search ";
+  
+  setColor(11);
+  std::cout << "[e]";
+  resetColor();
+  std::cout << "xport ";
+  
+  setColor(11);
+  std::cout << "[a]";
+  resetColor();
+  std::cout << "i-chat ";
+  
+  setColor(11);
+  std::cout << "[q]";
+  resetColor();
+  std::cout << "uit" << std::endl;
   std::cout << std::endl;
   
   std::cout << "Enter command: ";
@@ -318,30 +318,19 @@ inline void showMainMenu() {
   } else if (command == "r" || command == "R" || command == "reports" || 
              command == "v" || command == "V" || command == "view") {
     showViewTransactionsScreen();
-  } else if (command == "q" || command == "Q" || command == "quit" ||
-             command == "m" || command == "M" || command == "menu") {
-    if (command == "q" || command == "Q" || command == "quit") {
-      clearScreen();
-      std::cout << "Thank you for using AI Expense Manager!" << std::endl;
-      std::exit(0);
-    } else {
-      showMainMenu(); // Refresh menu
-    }
+  } else if (command == "q" || command == "Q" || command == "quit") {
+    handleNavigation("q");
+  } else if (command == "m" || command == "M" || command == "menu") {
+    showMainMenu(); // Refresh menu
   } else if (command == "a" || command == "A" || command == "ai" || 
              command == "c" || command == "C" || command == "chat") {
     showAIScreen();
   } else if (command == "g" || command == "G" || command == "graphs") {
     showGraphsScreen();
-  } else if (command == "s" || command == "S" || command == "settings") {
-    // Settings screen - for now just show message
-    std::cout << "Settings feature coming soon. Press ENTER to continue..." << std::endl;
-    std::cin.get();
-    showMainMenu();
-  } else if (command == "/" || command.find("/") == 0) {
-    // Search feature - for now just show message
-    std::cout << "Search feature coming soon. Press ENTER to continue..." << std::endl;
-    std::cin.get();
-    showMainMenu();
+  } else if (command == "e" || command == "E" || command == "export") {
+    showExportScreen();
+  } else if (command == "/" || command == "s" || command == "S" || command == "search") {
+    showSearchScreen();
   } else {
     std::cout << "Invalid command. Press ENTER to continue..." << std::endl;
     std::cin.get();
