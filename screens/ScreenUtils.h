@@ -157,3 +157,112 @@ inline double getDoubleInput() {
     return -1.0;
   }
 }
+
+// Draw a beautiful header with navigation hints
+inline void drawScreenHeader(const std::string &title, bool showBack = true) {
+  std::string nav = showBack ? "[b]ack  [q]uit" : "[q]uit";
+  drawDashedBox(title, nav);
+}
+
+// Draw the persistent navigation footer
+inline void drawNavFooter() {
+  std::cout << std::endl;
+  std::cout << "  ";
+  for (int i = 0; i < 76; i++) std::cout << "─";
+  std::cout << std::endl;
+  std::cout << "  ";
+  setColor(8); // Gray
+  std::cout << "Navigation: ";
+  resetColor();
+  setColor(11);
+  std::cout << "[b]";
+  resetColor();
+  std::cout << " Back  ";
+  setColor(11);
+  std::cout << "[m]";
+  resetColor();
+  std::cout << " Menu  ";
+  setColor(11);
+  std::cout << "[q]";
+  resetColor();
+  std::cout << " Quit" << std::endl;
+}
+
+// Draw a section title with decoration
+inline void drawSectionTitle(const std::string &title, const std::string &icon = "") {
+  std::cout << std::endl;
+  std::cout << "  ";
+  if (!icon.empty()) std::cout << icon << " ";
+  setColor(14); // Yellow
+  std::cout << title;
+  resetColor();
+  std::cout << std::endl;
+  std::cout << "  ";
+  for (int i = 0; i < 50; i++) std::cout << "─";
+  std::cout << std::endl;
+}
+
+// Draw a styled menu option
+inline void drawMenuOption(const std::string &key, const std::string &label, const std::string &icon = "") {
+  std::cout << "  ";
+  if (!icon.empty()) std::cout << icon << " ";
+  setColor(11); // Cyan
+  std::cout << "[" << key << "]";
+  resetColor();
+  std::cout << " " << label << std::endl;
+}
+
+// Draw an info line with icon
+inline void drawInfoLine(const std::string &icon, const std::string &label, const std::string &value, int color = 7) {
+  std::cout << "  " << icon << " " << label << ": ";
+  setColor(color);
+  std::cout << value << std::endl;
+  resetColor();
+}
+
+// Draw a status message (success, error, warning)
+inline void drawStatusMessage(const std::string &message, const std::string &type = "info") {
+  std::cout << "  ";
+  if (type == "success") {
+    setColor(10); // Green
+    std::cout << "✓ ";
+  } else if (type == "error") {
+    setColor(12); // Red
+    std::cout << "✗ ";
+  } else if (type == "warning") {
+    setColor(14); // Yellow
+    std::cout << "⚠ ";
+  } else {
+    setColor(11); // Cyan
+    std::cout << "ℹ ";
+  }
+  std::cout << message << std::endl;
+  resetColor();
+}
+
+// Draw a prompt for input
+inline void drawPrompt(const std::string &prompt) {
+  std::cout << std::endl;
+  std::cout << "  ";
+  setColor(11);
+  std::cout << "▶ ";
+  resetColor();
+  std::cout << prompt << ": ";
+}
+
+// Handle common navigation commands, returns true if handled
+inline bool handleNavigation(const std::string &input) {
+  if (input == "q" || input == "Q" || input == "quit" || input == "exit") {
+    clearScreen();
+    std::cout << std::endl;
+    std::cout << "  ╔══════════════════════════════════════════╗" << std::endl;
+    std::cout << "  ║  Thank you for using AI Expense Manager  ║" << std::endl;
+    std::cout << "  ║           See you next time! 👋          ║" << std::endl;
+    std::cout << "  ╚══════════════════════════════════════════╝" << std::endl;
+    std::cout << std::endl;
+    std::exit(0);
+    return true;
+  }
+  return false;
+}
+

@@ -1,9 +1,9 @@
 #include <iostream>
 #include <windows.h> // For Windows console functions - must be FIRST
 
-#include "modules/AuthManager.h"
-#include "modules/FileHandler.h"
-#include "screens/Screens.h"
+#include "../modules/AuthManager.h"
+#include "../modules/FileHandler.h"
+#include "../screens/Screens.h"
 
 int main() {
   // Set console output to UTF-8 for proper emoji display

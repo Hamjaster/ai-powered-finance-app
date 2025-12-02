@@ -10,27 +10,31 @@
 inline void showAddTransactionScreen() {
   clearScreen();
 
-  drawBoxedTitle("Add Transaction");
+  // Beautiful header
+  drawScreenHeader("AI Expense • Add Transaction", true);
   std::cout << std::endl;
 
-  drawSeparator();
-  std::cout << "  Select Type:" << std::endl;
-  std::cout << "  ";
-  setColor(12);
-  std::cout << "[1] Expense";
-  resetColor();
-  std::cout << "   ";
-  setColor(10);
-  std::cout << "[2] Income";
-  resetColor();
-  std::cout << "   ";
-  setColor(11);
-  std::cout << "[3] AI Assistant";
-  resetColor();
-  std::cout << std::endl << std::endl;
+  // Transaction type selection with icons
+  std::cout << "  ╭────────────────────────────────────────────────────────────────────╮" << std::endl;
+  std::cout << "  │                    What would you like to add?                     │" << std::endl;
+  std::cout << "  ╰────────────────────────────────────────────────────────────────────╯" << std::endl;
+  std::cout << std::endl;
 
-  std::cout << "  Choice: ";
+  drawMenuOption("1", "Add Expense", "💸");
+  drawMenuOption("2", "Add Income", "💰");
+  drawMenuOption("3", "AI Assistant", "🤖");
+  std::cout << std::endl;
+  drawMenuOption("b", "Go Back", "←");
+
+  drawPrompt("Choice");
   std::string choiceStr = getInput();
+
+  // Handle navigation
+  if (choiceStr == "b" || choiceStr == "B" || choiceStr == "back") {
+    showMainMenu();
+    return;
+  }
+  if (handleNavigation(choiceStr)) return;
 
   int choice = 0;
   try {
@@ -48,42 +52,49 @@ inline void showAddTransactionScreen() {
     showAIScreen();
     return;
   } else {
-    setColor(12);
-    std::cout << "✗ Invalid choice." << std::endl;
-    resetColor();
     std::cout << std::endl;
-    std::cout << "Press ENTER to retry..." << std::endl;
+    drawStatusMessage("Invalid choice. Please try again.", "error");
+    std::cout << std::endl;
+    std::cout << "  Press ENTER to retry...";
     std::cin.get();
     showAddTransactionScreen();
     return;
+  }
+
+  // Amount input
+  std::cout << std::endl;
+  if (type == "expense") {
+    drawSectionTitle("New Expense", "💸");
+  } else {
+    drawSectionTitle("New Income", "💰");
   }
 
   std::cout << "  Amount: $";
   double amount = getDoubleInput();
   if (amount <= 0) {
-    setColor(12);
-    std::cout << "✗ Invalid amount." << std::endl;
-    resetColor();
     std::cout << std::endl;
-    std::cout << "Press ENTER to retry..." << std::endl;
+    drawStatusMessage("Invalid amount. Must be greater than 0.", "error");
+    std::cout << std::endl;
+    std::cout << "  Press ENTER to retry...";
     std::cin.get();
     showAddTransactionScreen();
     return;
   }
 
+  // Description input
   std::cout << "  Description: ";
   std::string description = getInput();
   if (description.empty()) {
-    setColor(12);
-    std::cout << "✗ Description cannot be empty." << std::endl;
-    resetColor();
     std::cout << std::endl;
-    std::cout << "Press ENTER to retry..." << std::endl;
+    drawStatusMessage("Description cannot be empty.", "error");
+    std::cout << std::endl;
+    std::cout << "  Press ENTER to retry...";
     std::cin.get();
     showAddTransactionScreen();
     return;
   }
 
+  // Optional note
   std::cout << "  Note (optional): ";
   std::string note = getInput();
   if (!note.empty()) {
@@ -92,30 +103,27 @@ inline void showAddTransactionScreen() {
 
   std::cout << std::endl;
 
+  // Add transaction and show result
   if (TransactionManager::addTransaction(type, amount, description)) {
-    setColor(10);
-    std::cout << "✓ ";
+    std::cout << "  ╭────────────────────────────────────────────╮" << std::endl;
     if (type == "income") {
-      std::cout << "Income";
+      setColor(10);
+      std::cout << "  │  ✓ Income added successfully!              │" << std::endl;
     } else {
-      std::cout << "Expense";
+      setColor(10);
+      std::cout << "  │  ✓ Expense added successfully!             │" << std::endl;
     }
-    std::cout << " added successfully!" << std::endl;
     resetColor();
-    std::cout << std::endl;
+    std::cout << "  ╰────────────────────────────────────────────╯" << std::endl;
   } else {
-    setColor(12);
-    std::cout << "✗ Failed to add transaction." << std::endl;
-    resetColor();
-    std::cout << std::endl;
+    drawStatusMessage("Failed to add transaction.", "error");
   }
 
-  std::cout << "Press ";
-  setColor(14);
-  std::cout << "ENTER";
-  resetColor();
-  std::cout << " to return to menu..." << std::endl;
-  std::cin.ignore();
-  std::cin.get();
+  // Navigation footer
+  drawNavFooter();
+
+  drawPrompt("Press ENTER to continue or 'b' to go back");
+  std::string input = getInput();
+  if (handleNavigation(input)) return;
   showMainMenu();
 }

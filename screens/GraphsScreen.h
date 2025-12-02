@@ -322,20 +322,23 @@ inline void drawTrendLine(const std::vector<std::string> &labels,
 inline void showGraphsScreen() {
   clearScreen();
 
-  // Header
-  std::string nav = "[b]ack [m]enu";
-  drawDashedBox("AI Expense • Spending Graphs", nav);
+  // Beautiful header with consistent navigation
+  drawScreenHeader("AI Expense • Spending Graphs", true);
   std::cout << std::endl;
 
   // Get all transactions
   std::vector<Transaction> transactions = TransactionManager::getAllTransactions();
 
   if (transactions.empty()) {
-    std::cout << "  No transactions found. Add some transactions first!"
-              << std::endl;
-    std::cout << std::endl;
-    std::cout << "  Press ENTER to go back...";
-    getInput();
+    std::cout << "  ╭────────────────────────────────────────────────────────────────────╮" << std::endl;
+    std::cout << "  │              📭 No transactions found yet!                         │" << std::endl;
+    std::cout << "  │         Add some transactions to see your spending graphs.        │" << std::endl;
+    std::cout << "  ╰────────────────────────────────────────────────────────────────────╯" << std::endl;
+    
+    drawNavFooter();
+    drawPrompt("Enter command");
+    std::string input = getInput();
+    if (handleNavigation(input)) return;
     showMainMenu();
     return;
   }
@@ -399,96 +402,72 @@ inline void showGraphsScreen() {
   double totalExpenses = TransactionManager::getTotalExpenses();
   double totalIncome = TransactionManager::getTotalIncome();
 
-  // Display summary
-  std::cout << "  📊 Financial Summary" << std::endl;
-  std::cout << "  ";
-  for (int i = 0; i < 40; i++)
-    std::cout << "─";
-  std::cout << std::endl;
-
-  std::cout << "  Total Income:   ";
-  setColor(10); // Green
-  std::cout << "$" << std::fixed << std::setprecision(2) << totalIncome
-            << std::endl;
+  // Display summary in a nice box
+  std::cout << "  ╭────────────────────────────────────────────────────────────────────╮" << std::endl;
+  std::cout << "  │                      📊 Financial Summary                          │" << std::endl;
+  std::cout << "  ├────────────────────────────────────────────────────────────────────┤" << std::endl;
+  
+  std::cout << "  │  Total Income:   ";
+  setColor(10);
+  std::cout << "+$" << std::fixed << std::setprecision(2) << std::setw(12) << totalIncome;
   resetColor();
+  std::cout << "                                  │" << std::endl;
 
-  std::cout << "  Total Expenses: ";
-  setColor(12); // Red
-  std::cout << "$" << std::fixed << std::setprecision(2) << totalExpenses
-            << std::endl;
+  std::cout << "  │  Total Expenses: ";
+  setColor(12);
+  std::cout << "-$" << std::fixed << std::setprecision(2) << std::setw(12) << totalExpenses;
   resetColor();
+  std::cout << "                                  │" << std::endl;
 
-  std::cout << "  Net Balance:    ";
   double balance = totalIncome - totalExpenses;
+  std::cout << "  │  Net Balance:    ";
   if (balance >= 0) {
     setColor(10);
-    std::cout << "+$" << balance << std::endl;
+    std::cout << "+$" << std::fixed << std::setprecision(2) << std::setw(12) << balance;
   } else {
     setColor(12);
-    std::cout << "-$" << (-balance) << std::endl;
+    std::cout << "-$" << std::fixed << std::setprecision(2) << std::setw(12) << (-balance);
   }
   resetColor();
+  std::cout << "                                  │" << std::endl;
+  std::cout << "  ╰────────────────────────────────────────────────────────────────────╯" << std::endl;
   std::cout << std::endl;
 
   // Menu for different graph types
-  std::cout << "  Select a graph to view:" << std::endl;
+  drawSectionTitle("Select a Graph to View", "📈");
   std::cout << std::endl;
 
-  setColor(11);
-  std::cout << "  [1]";
-  resetColor();
-  std::cout << " Category Breakdown (Pie Chart)" << std::endl;
-
-  setColor(11);
-  std::cout << "  [2]";
-  resetColor();
-  std::cout << " Monthly Comparison (Bar Chart)" << std::endl;
-
-  setColor(11);
-  std::cout << "  [3]";
-  resetColor();
-  std::cout << " Spending Trend (Line Chart)" << std::endl;
-
-  setColor(11);
-  std::cout << "  [4]";
-  resetColor();
-  std::cout << " Top Expenses (Horizontal Bars)" << std::endl;
-
-  setColor(11);
-  std::cout << "  [5]";
-  resetColor();
-  std::cout << " All Graphs Overview" << std::endl;
-
+  drawMenuOption("1", "Category Breakdown (Pie Chart)", "🥧");
+  drawMenuOption("2", "Monthly Comparison (Bar Chart)", "📊");
+  drawMenuOption("3", "Spending Trend (Line Chart)", "📉");
+  drawMenuOption("4", "Top Expenses (Horizontal Bars)", "💰");
+  drawMenuOption("5", "All Graphs Overview", "🔍");
   std::cout << std::endl;
-  std::cout << "  Enter choice (or 'b' to go back): ";
+  drawMenuOption("b", "Go Back to Menu", "←");
+
+  drawPrompt("Choice");
   std::string choice = getInput();
 
-  if (choice == "b" || choice == "B" || choice == "back") {
+  // Handle navigation
+  if (choice == "b" || choice == "B" || choice == "back" || choice == "m" || choice == "M") {
     showMainMenu();
     return;
   }
+  if (handleNavigation(choice)) return;
 
   clearScreen();
-  drawDashedBox("AI Expense • Spending Graphs", nav);
+  drawScreenHeader("AI Expense • Spending Graphs", true);
   std::cout << std::endl;
 
   if (choice == "1") {
     // Category breakdown pie chart
-    std::cout << "  📊 Spending by Category" << std::endl;
-    std::cout << "  ";
-    for (int i = 0; i < 60; i++)
-      std::cout << "─";
-    std::cout << std::endl;
+    drawSectionTitle("Spending by Category", "🥧");
 
     drawPieChartASCII(categorySpending, totalExpenses);
 
   } else if (choice == "2") {
     // Monthly comparison bar chart
-    std::cout << "  📈 Monthly Income vs Expenses" << std::endl;
-    std::cout << "  ";
-    for (int i = 0; i < 60; i++)
-      std::cout << "─";
-    std::cout << std::endl;
+    drawSectionTitle("Monthly Income vs Expenses", "📊");
     std::cout << std::endl;
 
     // Prepare data for vertical bars
@@ -510,11 +489,7 @@ inline void showGraphsScreen() {
 
   } else if (choice == "3") {
     // Spending trend line chart
-    std::cout << "  📉 Expense Trend Over Time" << std::endl;
-    std::cout << "  ";
-    for (int i = 0; i < 60; i++)
-      std::cout << "─";
-    std::cout << std::endl;
+    drawSectionTitle("Expense Trend Over Time", "📉");
     std::cout << std::endl;
 
     // Sort transactions by date and create cumulative spending
@@ -552,11 +527,7 @@ inline void showGraphsScreen() {
 
   } else if (choice == "4") {
     // Top expenses horizontal bar chart
-    std::cout << "  💰 Top Spending Categories" << std::endl;
-    std::cout << "  ";
-    for (int i = 0; i < 60; i++)
-      std::cout << "─";
-    std::cout << std::endl;
+    drawSectionTitle("Top Spending Categories", "💰");
     std::cout << std::endl;
 
     // Sort categories by spending
@@ -573,11 +544,7 @@ inline void showGraphsScreen() {
 
     // Also show income
     std::cout << std::endl;
-    std::cout << "  📈 Income Sources" << std::endl;
-    std::cout << "  ";
-    for (int i = 0; i < 40; i++)
-      std::cout << "─";
-    std::cout << std::endl;
+    drawSectionTitle("Income Sources", "📈");
 
     // Categorize income (simplified)
     std::map<std::string, double> incomeCategories;
@@ -595,11 +562,7 @@ inline void showGraphsScreen() {
 
   } else if (choice == "5") {
     // All graphs overview
-    std::cout << "  📊 Complete Financial Overview" << std::endl;
-    std::cout << "  ";
-    for (int i = 0; i < 60; i++)
-      std::cout << "═";
-    std::cout << std::endl;
+    drawSectionTitle("Complete Financial Overview", "🔍");
     std::cout << std::endl;
 
     // Mini category breakdown
@@ -669,8 +632,15 @@ inline void showGraphsScreen() {
     std::cout << "  Invalid choice." << std::endl;
   }
 
-  std::cout << std::endl;
-  std::cout << "  Press ENTER to continue...";
-  getInput();
+  // Consistent navigation footer
+  drawNavFooter();
+
+  drawPrompt("Press ENTER to continue or 'b' to go back");
+  std::string input = getInput();
+  if (input == "b" || input == "B" || input == "back") {
+    showMainMenu();
+    return;
+  }
+  if (handleNavigation(input)) return;
   showGraphsScreen();
 }

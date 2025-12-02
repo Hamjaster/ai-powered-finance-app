@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../json.hpp" // Assuming json.hpp is in the root directory
+#include "../include/nlohmann/json.hpp"
 #include <array>
 #include <cstdio>
 #include <cstdlib>
@@ -41,7 +41,7 @@ public:
     }
 
     std::string command =
-        "curl -s -X POST https://openrouter.ai/api/v1/chat/completions "
+        "curl.exe -s -X POST https://openrouter.ai/api/v1/chat/completions "
         "-H \"Content-Type: application/json\" "
         "-H \"Authorization: Bearer " +
         api_key +
