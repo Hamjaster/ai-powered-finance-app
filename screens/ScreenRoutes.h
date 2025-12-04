@@ -9,3 +9,4 @@ void showAIScreen();
 void showGraphsScreen();
 void showExportScreen();
 void showSearchScreen();
+void showBudgetScreen();

@@ -2,6 +2,7 @@
 
 #include "AIScreen.h"
 #include "AddTransactionScreen.h"
+#include "BudgetScreen.h"
 #include "ExportScreen.h"
 #include "GraphsScreen.h"
 #include "LoginScreen.h"

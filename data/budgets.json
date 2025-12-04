@@ -1,0 +1,12 @@
+{
+  "budgets": {
+    "Entertainment": 200.0,
+    "Food": 900000.0,
+    "Health": 100.0,
+    "Housing": 1500.0,
+    "Other": 90000.0,
+    "Shopping": 300.0,
+    "Transport": 200.0,
+    "Utilities": 150.0
+  }
+}
