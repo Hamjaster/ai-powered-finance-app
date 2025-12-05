@@ -13,40 +13,36 @@
 inline void showLoginScreen() {
   clearScreen();
 
-  drawBoxedTitle("AI Expense Manager • Login");
+  drawScreenHeader("AI Expense Manager • Login", false);
   std::cout << std::endl;
-  User storedUser = FileHandler::readUserFromFile();
-  std::string username = storedUser.getUsername();
-
-  std::cout << "  Welcome back, ";
-  setColor(11); // Cyan
-  std::cout << username;
-  resetColor();
-  std::cout << "!" << std::endl;
+  
+  drawThinBox({
+    "Welcome back!",
+    "",
+    "Please enter your password to access your account.",
+    "Your data is encrypted and secure."
+  });
+  
   std::cout << std::endl;
-
-  std::cout << "  Please enter your password to continue." << std::endl;
-  std::cout << std::endl;
-  drawSeparator();
-  std::cout << "  Password: ";
+  drawPrompt("Password");
   std::string password = getPasswordInput();
-  drawSeparator();
   std::cout << std::endl;
 
   if (AuthManager::login(password)) {
-    setColor(10);
-    std::cout << "✓ Login successful. Loading your dashboard..." << std::endl;
-    resetColor();
-
+    // Get username AFTER successful login
+    User currentUser = AuthManager::getCurrentUser();
+    std::string username = currentUser.getUsername();
+    
+    std::cout << std::endl;
+    drawSuccessBox("Login successful! Welcome, " + username + "!");
+    
     Sleep(1500);
-
     showMainMenu();
   } else {
-    setColor(12);
-    std::cout << "✗ Invalid password. Please try again." << std::endl;
-    resetColor();
     std::cout << std::endl;
-    std::cout << "Press ENTER to retry..." << std::endl;
+    drawErrorBox("Invalid password. Please try again.");
+    std::cout << std::endl;
+    std::cout << "  Press ENTER to retry...";
     std::cin.get();
     showLoginScreen();
   }
