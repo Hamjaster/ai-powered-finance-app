@@ -1,5 +1,5 @@
 #pragma once
-#include "../json.hpp"
+#include "../include/nlohmann/json.hpp"
 #include "Transaction.h"
 #include "User.h"
 #include "EncryptionManager.h"

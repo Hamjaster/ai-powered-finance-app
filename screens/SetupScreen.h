@@ -7,33 +7,33 @@
 #include "ScreenRoutes.h"
 #include "ScreenUtils.h"
 
-inline void showSetupScreen()
-{
+inline void showSetupScreen() {
   clearScreen();
 
   drawBoxedTitle("AI Expense Manager • Setup");
   std::cout << std::endl;
 
-  std::cout << "👋 Welcome! ";
+  std::cout << "  👋 Welcome! ";
   setColor(11);
   std::cout << "Let's";
   resetColor();
   std::cout << " set up your profile." << std::endl;
   std::cout << std::endl;
 
-  std::cout << "Enter your name: ";
+  drawSeparator();
+  std::cout << "  Enter your name: ";
   std::string username = getInput();
 
-  std::cout << "Create a password: ";
+  std::cout << "  Create a password: ";
   std::string password = getPasswordInput();
 
-  std::cout << "Confirm password: ";
+  std::cout << "  Confirm password: ";
   std::string confirmPassword = getPasswordInput();
+  drawSeparator();
 
   std::cout << std::endl;
 
-  if (AuthManager::setupUser(username, password, confirmPassword))
-  {
+  if (AuthManager::setupUser(username, password, confirmPassword)) {
     setColor(10);
     std::cout << "✓ Profile created successfully!" << std::endl;
     resetColor();
@@ -60,9 +60,7 @@ inline void showSetupScreen()
     std::cin.get();
 
     showMainMenu();
-  }
-  else
-  {
+  } else {
     setColor(12);
     std::cout << "✗ Passwords do not match. Please try again." << std::endl;
     resetColor();
@@ -72,4 +70,3 @@ inline void showSetupScreen()
     showSetupScreen();
   }
 }
-

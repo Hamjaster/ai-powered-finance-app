@@ -10,20 +10,30 @@
 #include "ScreenRoutes.h"
 #include "ScreenUtils.h"
 
-inline void showLoginScreen()
-{
+inline void showLoginScreen() {
   clearScreen();
 
   drawBoxedTitle("AI Expense Manager • Login");
   std::cout << std::endl;
+  User storedUser = FileHandler::readUserFromFile();
+  std::string username = storedUser.getUsername();
 
-  std::cout << "Password: ";
-  std::string password = getPasswordInput();
-
+  std::cout << "  Welcome back, ";
+  setColor(11); // Cyan
+  std::cout << username;
+  resetColor();
+  std::cout << "!" << std::endl;
   std::cout << std::endl;
 
-  if (AuthManager::login(password))
-  {
+  std::cout << "  Please enter your password to continue." << std::endl;
+  std::cout << std::endl;
+  drawSeparator();
+  std::cout << "  Password: ";
+  std::string password = getPasswordInput();
+  drawSeparator();
+  std::cout << std::endl;
+
+  if (AuthManager::login(password)) {
     setColor(10);
     std::cout << "✓ Login successful. Loading your dashboard..." << std::endl;
     resetColor();
@@ -31,9 +41,7 @@ inline void showLoginScreen()
     Sleep(1500);
 
     showMainMenu();
-  }
-  else
-  {
+  } else {
     setColor(12);
     std::cout << "✗ Invalid password. Please try again." << std::endl;
     resetColor();
@@ -43,4 +51,3 @@ inline void showLoginScreen()
     showLoginScreen();
   }
 }
-
