@@ -16,13 +16,6 @@ inline void showLoginScreen()
 
   drawBoxedTitle("AI Expense Manager • Login");
   std::cout << std::endl;
-  std::cout << "debuggin STARTS";
-
-  User storedUser = FileHandler::readUserFromFile();
-  std::string username = storedUser.getUsername();
-
-  std::cout << "Hy, " << username << std::endl;
-  std::cout << "Name: " << username << std::endl;
 
   std::cout << "Password: ";
   std::string password = getPasswordInput();

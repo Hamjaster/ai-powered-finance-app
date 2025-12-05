@@ -21,10 +21,10 @@ public:
             return false;
         }
 
-        // Create user and save
+        // Create user and save (encrypt with password)
         User newUser(username, password);
         FileHandler::ensureDataDirectory();
-        FileHandler::writeUserToFile(newUser);
+        FileHandler::writeUserToFile(newUser, password);
         currentUser = newUser;
 
         return true;
@@ -33,10 +33,12 @@ public:
     // Login user
     static bool login(const string &password)
     {
-        User storedUser = FileHandler::readUserFromFile();
+        // Try to decrypt and read user file with provided password
+        User storedUser = FileHandler::readUserFromFile(password);
 
-        // Check if password matches
-        if (storedUser.getPassword() == password)
+        // If decryption succeeded and we got a valid user, check if password matches
+        // (If password was wrong, readUserFromFile returns empty user)
+        if (!storedUser.getUsername().empty() && storedUser.getPassword() == password)
         {
             currentUser = storedUser;
             return true;

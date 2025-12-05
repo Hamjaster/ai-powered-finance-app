@@ -1,6 +1,7 @@
 #pragma once
 #include "FileHandler.h"
 #include "Transaction.h"
+#include "AuthManager.h"
 #include <algorithm>
 #include <vector>
 
@@ -12,7 +13,10 @@ public:
   // Get all transactions
   static vector<Transaction> getAllTransactions()
   {
-    return FileHandler::readTransactionsFromFile();
+    // Get password from current logged-in user
+    User currentUser = AuthManager::getCurrentUser();
+    string password = currentUser.getPassword();
+    return FileHandler::readTransactionsFromFile(password);
   }
 
   // Get next available ID
@@ -67,8 +71,10 @@ public:
     // Add to vector
     transactions.push_back(newTransaction);
 
-    // Save to file
-    FileHandler::writeTransactionsToFile(transactions);
+    // Save to file (encrypt with current user's password)
+    User currentUser = AuthManager::getCurrentUser();
+    string password = currentUser.getPassword();
+    FileHandler::writeTransactionsToFile(transactions, password);
 
     return true;
   }
