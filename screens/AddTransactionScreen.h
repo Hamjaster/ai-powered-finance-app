@@ -11,13 +11,11 @@ inline void showAddTransactionScreen() {
   clearScreen();
 
   // Beautiful header
-  drawScreenHeader("AI Expense • Add Transaction", true);
+  drawScreenHeader("AI Expense - Add Transaction", true);
   std::cout << std::endl;
 
   // Transaction type selection with icons
-  std::cout << "  ╭────────────────────────────────────────────────────────────────────╮" << std::endl;
-  std::cout << "  │                    What would you like to add?                     │" << std::endl;
-  std::cout << "  ╰────────────────────────────────────────────────────────────────────╯" << std::endl;
+  drawInfoBox("                   What would you like to add?");
   std::cout << std::endl;
 
   drawMenuOption("1", "Add Expense", "💸");
@@ -105,16 +103,12 @@ inline void showAddTransactionScreen() {
 
   // Add transaction and show result
   if (TransactionManager::addTransaction(type, amount, description)) {
-    std::cout << "  ╭────────────────────────────────────────────╮" << std::endl;
+    std::cout << std::endl;
     if (type == "income") {
-      setColor(10);
-      std::cout << "  │  ✓ Income added successfully!              │" << std::endl;
+      drawSuccessBox("Income added successfully!");
     } else {
-      setColor(10);
-      std::cout << "  │  ✓ Expense added successfully!             │" << std::endl;
+      drawSuccessBox("Expense added successfully!");
     }
-    resetColor();
-    std::cout << "  ╰────────────────────────────────────────────╯" << std::endl;
   } else {
     drawStatusMessage("Failed to add transaction.", "error");
   }

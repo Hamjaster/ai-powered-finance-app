@@ -10,7 +10,7 @@
 inline void showSetupScreen() {
   clearScreen();
 
-  drawBoxedTitle("AI Expense Manager • Setup");
+  drawBoxedTitle("AI Expense Manager - Setup");
   std::cout << std::endl;
 
   std::cout << "  👋 Welcome! ";

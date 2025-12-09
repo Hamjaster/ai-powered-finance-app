@@ -1,6 +1,11 @@
 #pragma once
 
+// IMPORTANT: Include windows.h BEFORE C++ standard headers to avoid std::byte conflict
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 #include <conio.h>
+
+#include <algorithm>
 #include <cstdlib>
 #include <ctime>
 #include <iomanip>
@@ -8,7 +13,6 @@
 #include <sstream>
 #include <string>
 #include <vector>
-#include <windows.h>
 
 // ═══════════════════════════════════════════════════════════════════════════
 // CORE UTILITIES
@@ -33,8 +37,11 @@ const int COLOR_MAGENTA = 13;
 const int COLOR_YELLOW = 14;
 const int COLOR_BRIGHT_WHITE = 15;
 
-// Standard box width
-const int BOX_WIDTH = 78;
+// Standard box width (inner content width)
+// Header: ╔ + BOX_WIDTH × ═ + ╗
+// Content: ║ + space + BOX_INNER text + space + ║ where BOX_INNER = BOX_WIDTH - 2
+const int BOX_WIDTH = 76;
+const int BOX_INNER = 74;  // BOX_WIDTH - 2 for the two spaces
 
 // ═══════════════════════════════════════════════════════════════════════════
 // BOX DRAWING - Consistent Unicode boxes
@@ -42,16 +49,14 @@ const int BOX_WIDTH = 78;
 
 // Draw a double-line header box
 inline void drawHeader(const std::string& title, const std::string& nav = "") {
-  std::string rightText = nav;
-  
   std::cout << "  ╔";
-  for (int i = 0; i < BOX_WIDTH - 2; i++) std::cout << "═";
+  for (int i = 0; i < BOX_WIDTH; i++) std::cout << "═";
   std::cout << "╗" << std::endl;
 
-  int innerWidth = BOX_WIDTH - 4;
   int titleLen = static_cast<int>(title.length());
-  int rightLen = static_cast<int>(rightText.length());
-  int padding = innerWidth - titleLen - rightLen;
+  int navLen = static_cast<int>(nav.length());
+  int textUsed = titleLen + navLen;
+  int padding = BOX_INNER - textUsed;
   if (padding < 1) padding = 1;
 
   std::cout << "  ║ ";
@@ -60,12 +65,12 @@ inline void drawHeader(const std::string& title, const std::string& nav = "") {
   resetColor();
   for (int i = 0; i < padding; i++) std::cout << " ";
   setColor(COLOR_GRAY);
-  std::cout << rightText;
+  std::cout << nav;
   resetColor();
   std::cout << " ║" << std::endl;
 
   std::cout << "  ╚";
-  for (int i = 0; i < BOX_WIDTH - 2; i++) std::cout << "═";
+  for (int i = 0; i < BOX_WIDTH; i++) std::cout << "═";
   std::cout << "╝" << std::endl;
 }
 
@@ -98,11 +103,11 @@ inline void drawSeparator() {
 // Draw thin box (for content sections)
 inline void drawThinBox(const std::vector<std::string>& lines) {
   std::cout << "  ┌";
-  for (int i = 0; i < BOX_WIDTH - 2; i++) std::cout << "─";
+  for (int i = 0; i < BOX_WIDTH; i++) std::cout << "─";
   std::cout << "┐" << std::endl;
 
   for (const auto& line : lines) {
-    int padding = BOX_WIDTH - 4 - static_cast<int>(line.length());
+    int padding = BOX_INNER - static_cast<int>(line.length());
     if (padding < 0) padding = 0;
     std::cout << "  │ " << line;
     for (int i = 0; i < padding; i++) std::cout << " ";
@@ -110,7 +115,62 @@ inline void drawThinBox(const std::vector<std::string>& lines) {
   }
 
   std::cout << "  └";
-  for (int i = 0; i < BOX_WIDTH - 2; i++) std::cout << "─";
+  for (int i = 0; i < BOX_WIDTH; i++) std::cout << "─";
+  std::cout << "┘" << std::endl;
+}
+
+// Draw info box with title and description
+inline void drawInfoBox(const std::string& line1, const std::string& line2 = "", const std::string& line3 = "") {
+  std::cout << "  ┌";
+  for (int i = 0; i < BOX_WIDTH; i++) std::cout << "─";
+  std::cout << "┐" << std::endl;
+  
+  auto printLine = [](const std::string& text) {
+    int padding = BOX_INNER - static_cast<int>(text.length());
+    if (padding < 0) padding = 0;
+    std::cout << "  │ " << text;
+    for (int i = 0; i < padding; i++) std::cout << " ";
+    std::cout << " │" << std::endl;
+  };
+  
+  printLine(line1);
+  if (!line2.empty()) printLine(line2);
+  if (!line3.empty()) printLine(line3);
+  
+  std::cout << "  └";
+  for (int i = 0; i < BOX_WIDTH; i++) std::cout << "─";
+  std::cout << "┘" << std::endl;
+}
+
+// Draw info box with divider
+inline void drawInfoBoxWithDivider(const std::string& title, const std::vector<std::string>& items) {
+  std::cout << "  ┌";
+  for (int i = 0; i < BOX_WIDTH; i++) std::cout << "─";
+  std::cout << "┐" << std::endl;
+  
+  // Title line
+  int titlePad = BOX_INNER - static_cast<int>(title.length());
+  if (titlePad < 0) titlePad = 0;
+  std::cout << "  │ " << title;
+  for (int i = 0; i < titlePad; i++) std::cout << " ";
+  std::cout << " │" << std::endl;
+  
+  // Divider
+  std::cout << "  ├";
+  for (int i = 0; i < BOX_WIDTH; i++) std::cout << "─";
+  std::cout << "┤" << std::endl;
+  
+  // Items
+  for (const auto& item : items) {
+    int itemPad = BOX_INNER - static_cast<int>(item.length());
+    if (itemPad < 0) itemPad = 0;
+    std::cout << "  │ " << item;
+    for (int i = 0; i < itemPad; i++) std::cout << " ";
+    std::cout << " │" << std::endl;
+  }
+  
+  std::cout << "  └";
+  for (int i = 0; i < BOX_WIDTH; i++) std::cout << "─";
   std::cout << "┘" << std::endl;
 }
 
@@ -310,36 +370,46 @@ inline void drawStatusMessage(const std::string &message, const std::string &typ
 }
 
 inline void drawSuccessBox(const std::string& message) {
+  int msgLen = static_cast<int>(message.length());
+  int boxWidth = std::max(52, msgLen + 8);  // Min 52, or message + padding
+  
   std::cout << "  ┌";
-  for (int i = 0; i < 50; i++) std::cout << "─";
+  for (int i = 0; i < boxWidth - 2; i++) std::cout << "─";
   std::cout << "┐" << std::endl;
   
+  std::cout << "  │  ";
   setColor(COLOR_GREEN);
-  std::cout << "  │  ✓ " << message;
+  std::cout << "✓ " << message;
   resetColor();
-  int padding = 46 - static_cast<int>(message.length());
+  int padding = boxWidth - 6 - msgLen;
+  if (padding < 0) padding = 0;
   for (int i = 0; i < padding; i++) std::cout << " ";
   std::cout << "│" << std::endl;
   
   std::cout << "  └";
-  for (int i = 0; i < 50; i++) std::cout << "─";
+  for (int i = 0; i < boxWidth - 2; i++) std::cout << "─";
   std::cout << "┘" << std::endl;
 }
 
 inline void drawErrorBox(const std::string& message) {
+  int msgLen = static_cast<int>(message.length());
+  int boxWidth = std::max(52, msgLen + 8);  // Min 52, or message + padding
+  
   std::cout << "  ┌";
-  for (int i = 0; i < 50; i++) std::cout << "─";
+  for (int i = 0; i < boxWidth - 2; i++) std::cout << "─";
   std::cout << "┐" << std::endl;
   
+  std::cout << "  │  ";
   setColor(COLOR_RED);
-  std::cout << "  │  ✗ " << message;
+  std::cout << "✗ " << message;
   resetColor();
-  int padding = 46 - static_cast<int>(message.length());
+  int padding = boxWidth - 6 - msgLen;
+  if (padding < 0) padding = 0;
   for (int i = 0; i < padding; i++) std::cout << " ";
   std::cout << "│" << std::endl;
   
   std::cout << "  └";
-  for (int i = 0; i < 50; i++) std::cout << "─";
+  for (int i = 0; i < boxWidth - 2; i++) std::cout << "─";
   std::cout << "┘" << std::endl;
 }
 

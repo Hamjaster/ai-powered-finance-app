@@ -23,7 +23,7 @@ inline void showMainMenu() {
     clearScreen();
 
     // Header with Unicode border
-    drawHeader("AI Expense Manager • Dashboard", "[q]uit");
+    drawHeader("AI Expense Manager - Dashboard", "[q]uit");
     std::cout << std::endl;
 
     // Get transaction data
@@ -38,63 +38,41 @@ inline void showMainMenu() {
     // ═══════════════════════════════════════════════════════════════════════
     // FINANCIAL SUMMARY
     // ═══════════════════════════════════════════════════════════════════════
+    // FINANCIAL SUMMARY - Using simpler formatting without complex emoji width calc
+    // ═══════════════════════════════════════════════════════════════════════
     
-    std::cout << "  ┌─────────────────────────────────────────────────────────────────────────┐" << std::endl;
-    std::cout << "  │  📅 ";
-    setColor(COLOR_CYAN);
+    // Build the financial summary as separate lines
+    std::cout << "  ";
+    setColor(COLOR_YELLOW);
     std::cout << currentPeriod;
     resetColor();
+    std::cout << std::endl;
+    std::cout << std::endl;
     
-    // Calculate padding for right alignment
-    int periodLen = static_cast<int>(currentPeriod.length());
-    for (int i = 0; i < 66 - periodLen; i++) std::cout << " ";
-    std::cout << "│" << std::endl;
-    
-    std::cout << "  │                                                                         │" << std::endl;
-    
-    // Balance row
-    std::ostringstream balanceStr;
-    balanceStr << formatCurrency(balance);
-    std::cout << "  │  💰 Balance: ";
+    // Summary line 1: Balance and Income
+    std::cout << "  💰 Balance: ";
     if (balance >= 0) setColor(COLOR_GREEN);
     else setColor(COLOR_RED);
-    std::cout << balanceStr.str();
+    std::cout << formatCurrency(balance);
     resetColor();
     
-    // Income on same line
-    std::ostringstream incomeStr;
-    incomeStr << formatCurrency(totalIncome);
-    int balLen = static_cast<int>(balanceStr.str().length());
-    for (int i = 0; i < 20 - balLen; i++) std::cout << " ";
-    std::cout << "📈 Income: ";
+    std::cout << "          📈 Income: ";
     setColor(COLOR_GREEN);
-    std::cout << incomeStr.str();
+    std::cout << formatCurrency(totalIncome);
     resetColor();
+    std::cout << std::endl;
     
-    int incLen = static_cast<int>(incomeStr.str().length());
-    for (int i = 0; i < 24 - incLen; i++) std::cout << " ";
-    std::cout << "│" << std::endl;
-    
-    // Expenses row
-    std::ostringstream expStr;
-    expStr << formatCurrency(totalExpenses);
-    std::cout << "  │  📉 Expenses: ";
+    // Summary line 2: Expenses and Transaction count
+    std::cout << "  📉 Expenses: ";
     setColor(COLOR_RED);
-    std::cout << expStr.str();
+    std::cout << formatCurrency(totalExpenses);
     resetColor();
     
-    int expLen = static_cast<int>(expStr.str().length());
-    for (int i = 0; i < 19 - expLen; i++) std::cout << " ";
-    
-    // Transaction count
-    std::cout << "📋 Transactions: ";
+    std::cout << "         📋 Transactions: ";
     setColor(COLOR_CYAN);
     std::cout << transactions.size();
     resetColor();
-    for (int i = 0; i < 17; i++) std::cout << " ";
-    std::cout << "│" << std::endl;
-    
-    std::cout << "  └─────────────────────────────────────────────────────────────────────────┘" << std::endl;
+    std::cout << std::endl;
 
     // ═══════════════════════════════════════════════════════════════════════
     // BUDGET STATUS
@@ -110,7 +88,9 @@ inline void showMainMenu() {
       std::cout << "Budget Status";
       resetColor();
       std::cout << std::endl;
-      std::cout << "  ──────────────────────────────────────────────────────────────────────────" << std::endl;
+      std::cout << "  ";
+      for (int i = 0; i < BOX_WIDTH; i++) std::cout << "─";
+      std::cout << std::endl;
       
       // Show top 3-4 budgets with progress bars
       int shown = 0;
@@ -179,7 +159,9 @@ inline void showMainMenu() {
     std::cout << "Recent Transactions";
     resetColor();
     std::cout << std::endl;
-    std::cout << "  ──────────────────────────────────────────────────────────────────────────" << std::endl;
+    std::cout << "  ";
+    for (int i = 0; i < BOX_WIDTH; i++) std::cout << "─";
+    std::cout << std::endl;
     
     if (transactions.empty()) {
       setColor(COLOR_GRAY);
@@ -220,7 +202,9 @@ inline void showMainMenu() {
     // ═══════════════════════════════════════════════════════════════════════
     
     std::cout << std::endl;
-    std::cout << "  ──────────────────────────────────────────────────────────────────────────" << std::endl;
+    std::cout << "  ";
+    for (int i = 0; i < BOX_WIDTH; i++) std::cout << "─";
+    std::cout << std::endl;
     drawQuickAddHint();
 
     // ═══════════════════════════════════════════════════════════════════════

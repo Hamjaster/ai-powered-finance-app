@@ -148,17 +148,15 @@ inline void showExportScreen() {
   clearScreen();
 
   // Header
-  drawScreenHeader("AI Expense • Export Data", true);
+  drawScreenHeader("AI Expense - Export Data", true);
   std::cout << std::endl;
 
   // Get transactions
   std::vector<Transaction> transactions = TransactionManager::getAllTransactions();
 
   if (transactions.empty()) {
-    std::cout << "  ╭────────────────────────────────────────────────────────────────────╮" << std::endl;
-    std::cout << "  │              📭 No transactions to export!                         │" << std::endl;
-    std::cout << "  │         Add some transactions first.                              │" << std::endl;
-    std::cout << "  ╰────────────────────────────────────────────────────────────────────╯" << std::endl;
+    drawInfoBox("📭 No transactions to export!",
+                "   Add some transactions first.");
     
     drawNavFooter();
     drawPrompt("Press ENTER to go back");
@@ -168,10 +166,8 @@ inline void showExportScreen() {
   }
 
   // Info box
-  std::cout << "  ╭────────────────────────────────────────────────────────────────────╮" << std::endl;
-  std::cout << "  │  📤 Export your transaction data to a file                         │" << std::endl;
-  std::cout << "  │     Files will be saved in the current directory.                 │" << std::endl;
-  std::cout << "  ╰────────────────────────────────────────────────────────────────────╯" << std::endl;
+  drawInfoBox("📤 Export your transaction data to a file",
+              "   Files will be saved in the current directory.");
   std::cout << std::endl;
 
   // Show transaction count
@@ -232,13 +228,32 @@ inline void showExportScreen() {
   if (choice != "1" && choice != "2" && choice != "3" && choice != "4") {
     drawStatusMessage("Invalid choice.", "error");
   } else if (success) {
-    std::cout << "  ╭────────────────────────────────────────────────────────────────────╮" << std::endl;
-    std::cout << "  │  ✓ Export successful!                                             │" << std::endl;
-    std::cout << "  ├────────────────────────────────────────────────────────────────────┤" << std::endl;
+    std::cout << "  ┌";
+    for (int i = 0; i < BOX_WIDTH; i++) std::cout << "─";
+    std::cout << "┐" << std::endl;
+    
+    std::string successMsg = "✓ Export successful!";
+    int successPad = BOX_INNER - static_cast<int>(successMsg.length());
+    std::cout << "  │ " << successMsg;
+    for (int i = 0; i < successPad; i++) std::cout << " ";
+    std::cout << " │" << std::endl;
+    
+    std::cout << "  ├";
+    for (int i = 0; i < BOX_WIDTH; i++) std::cout << "─";
+    std::cout << "┤" << std::endl;
+    
     for (const auto &file : exportedFiles) {
-      std::cout << "  │  📁 " << std::left << std::setw(62) << file << " │" << std::endl;
+      std::string fileEntry = "📁 " + file;
+      int filePad = BOX_INNER - static_cast<int>(fileEntry.length());
+      if (filePad < 0) filePad = 0;
+      std::cout << "  │ " << fileEntry;
+      for (int i = 0; i < filePad; i++) std::cout << " ";
+      std::cout << " │" << std::endl;
     }
-    std::cout << "  ╰────────────────────────────────────────────────────────────────────╯" << std::endl;
+    
+    std::cout << "  └";
+    for (int i = 0; i < BOX_WIDTH; i++) std::cout << "─";
+    std::cout << "┘" << std::endl;
   } else {
     drawStatusMessage("Export failed. Check file permissions.", "error");
   }

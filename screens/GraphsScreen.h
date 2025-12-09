@@ -323,17 +323,15 @@ inline void showGraphsScreen() {
   clearScreen();
 
   // Beautiful header with consistent navigation
-  drawScreenHeader("AI Expense • Spending Graphs", true);
+  drawScreenHeader("AI Expense - Spending Graphs", true);
   std::cout << std::endl;
 
   // Get all transactions
   std::vector<Transaction> transactions = TransactionManager::getAllTransactions();
 
   if (transactions.empty()) {
-    std::cout << "  ╭────────────────────────────────────────────────────────────────────╮" << std::endl;
-    std::cout << "  │              📭 No transactions found yet!                         │" << std::endl;
-    std::cout << "  │         Add some transactions to see your spending graphs.        │" << std::endl;
-    std::cout << "  ╰────────────────────────────────────────────────────────────────────╯" << std::endl;
+    drawInfoBox("📭 No transactions found yet!",
+                "   Add some transactions to see your spending graphs.");
     
     drawNavFooter();
     drawPrompt("Enter command");
@@ -403,34 +401,56 @@ inline void showGraphsScreen() {
   double totalIncome = TransactionManager::getTotalIncome();
 
   // Display summary in a nice box
-  std::cout << "  ╭────────────────────────────────────────────────────────────────────╮" << std::endl;
-  std::cout << "  │                      📊 Financial Summary                          │" << std::endl;
-  std::cout << "  ├────────────────────────────────────────────────────────────────────┤" << std::endl;
+  std::cout << "  ┌";
+  for (int i = 0; i < BOX_WIDTH; i++) std::cout << "─";
+  std::cout << "┐" << std::endl;
+  
+  std::cout << "  │                         📊 Financial Summary";
+  for (int i = 0; i < 27; i++) std::cout << " ";
+  std::cout << "│" << std::endl;
+  
+  std::cout << "  ├";
+  for (int i = 0; i < BOX_WIDTH; i++) std::cout << "─";
+  std::cout << "┤" << std::endl;
   
   std::cout << "  │  Total Income:   ";
   setColor(10);
-  std::cout << "+$" << std::fixed << std::setprecision(2) << std::setw(12) << totalIncome;
+  std::ostringstream incStr;
+  incStr << "+$" << std::fixed << std::setprecision(2) << totalIncome;
+  std::cout << std::setw(14) << incStr.str();
   resetColor();
-  std::cout << "                                  │" << std::endl;
+  for (int i = 0; i < 40; i++) std::cout << " ";
+  std::cout << "│" << std::endl;
 
   std::cout << "  │  Total Expenses: ";
   setColor(12);
-  std::cout << "-$" << std::fixed << std::setprecision(2) << std::setw(12) << totalExpenses;
+  std::ostringstream expTotalStr;
+  expTotalStr << "-$" << std::fixed << std::setprecision(2) << totalExpenses;
+  std::cout << std::setw(14) << expTotalStr.str();
   resetColor();
-  std::cout << "                                  │" << std::endl;
+  for (int i = 0; i < 40; i++) std::cout << " ";
+  std::cout << "│" << std::endl;
 
   double balance = totalIncome - totalExpenses;
   std::cout << "  │  Net Balance:    ";
   if (balance >= 0) {
     setColor(10);
-    std::cout << "+$" << std::fixed << std::setprecision(2) << std::setw(12) << balance;
+    std::ostringstream balStr;
+    balStr << "+$" << std::fixed << std::setprecision(2) << balance;
+    std::cout << std::setw(14) << balStr.str();
   } else {
     setColor(12);
-    std::cout << "-$" << std::fixed << std::setprecision(2) << std::setw(12) << (-balance);
+    std::ostringstream balStr;
+    balStr << "-$" << std::fixed << std::setprecision(2) << (-balance);
+    std::cout << std::setw(14) << balStr.str();
   }
   resetColor();
-  std::cout << "                                  │" << std::endl;
-  std::cout << "  ╰────────────────────────────────────────────────────────────────────╯" << std::endl;
+  for (int i = 0; i < 40; i++) std::cout << " ";
+  std::cout << "│" << std::endl;
+  
+  std::cout << "  └";
+  for (int i = 0; i < BOX_WIDTH; i++) std::cout << "─";
+  std::cout << "┘" << std::endl;
   std::cout << std::endl;
 
   // Menu for different graph types
@@ -456,7 +476,7 @@ inline void showGraphsScreen() {
   if (handleNavigation(choice)) return;
 
   clearScreen();
-  drawScreenHeader("AI Expense • Spending Graphs", true);
+  drawScreenHeader("AI Expense - Spending Graphs", true);
   std::cout << std::endl;
 
   if (choice == "1") {

@@ -10,14 +10,12 @@ inline void showAIScreen() {
   clearScreen();
 
   // Beautiful header
-  drawScreenHeader("AI Expense • Financial Advisor", true);
+  drawScreenHeader("AI Expense - Financial Advisor", true);
   std::cout << std::endl;
 
   // Welcome section
-  std::cout << "  ╭────────────────────────────────────────────────────────────────────╮" << std::endl;
-  std::cout << "  │  🤖 Welcome to your AI Financial Advisor!                          │" << std::endl;
-  std::cout << "  │     Ask me anything about budgeting, saving, or investing.        │" << std::endl;
-  std::cout << "  ╰────────────────────────────────────────────────────────────────────╯" << std::endl;
+  drawInfoBox("🤖 Welcome to your AI Financial Advisor!",
+              "   Ask me anything about budgeting, saving, or investing.");
   std::cout << std::endl;
 
   json conversation_history = json::array();

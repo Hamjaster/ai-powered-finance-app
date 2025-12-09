@@ -14,17 +14,15 @@ inline void showViewTransactionsScreen() {
   clearScreen();
 
   // Beautiful header
-  drawScreenHeader("AI Expense • Transaction History", true);
+  drawScreenHeader("AI Expense - Transaction History", true);
   std::cout << std::endl;
 
   std::vector<Transaction> transactions =
       TransactionManager::getAllTransactions();
 
   if (transactions.empty()) {
-    std::cout << "  ╭────────────────────────────────────────────────────────────────────╮" << std::endl;
-    std::cout << "  │              📭 No transactions found yet!                         │" << std::endl;
-    std::cout << "  │         Add your first transaction to get started.                │" << std::endl;
-    std::cout << "  ╰────────────────────────────────────────────────────────────────────╯" << std::endl;
+    drawInfoBox("No transactions found yet!",
+                "Add your first transaction to get started.");
     
     drawNavFooter();
     drawPrompt("Enter command");
@@ -113,9 +111,7 @@ inline void showViewTransactionsScreen() {
   std::cout << std::endl;
 
   // AI Analysis section
-  std::cout << "  ╭────────────────────────────────────────────────────────────────────╮" << std::endl;
-  std::cout << "  │  🤖 Ask AI about your finances (or press ENTER to go back)        │" << std::endl;
-  std::cout << "  ╰────────────────────────────────────────────────────────────────────╯" << std::endl;
+  drawInfoBox("Ask AI about your finances (or press ENTER to go back)");
 
   // Prepare AI Context
   json conversation_history = json::array();

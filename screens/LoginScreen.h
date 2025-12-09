@@ -13,7 +13,7 @@
 inline void showLoginScreen() {
   clearScreen();
 
-  drawScreenHeader("AI Expense Manager • Login", false);
+  drawScreenHeader("AI Expense Manager - Login", false);
   std::cout << std::endl;
   
   drawThinBox({

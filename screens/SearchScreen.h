@@ -89,9 +89,7 @@ inline std::string categorizeTransaction(const std::string &description) {
 inline void displayFilteredTransactions(const std::vector<Transaction> &transactions) {
   if (transactions.empty()) {
     std::cout << std::endl;
-    std::cout << "  ╭────────────────────────────────────────────────────────────────────╮" << std::endl;
-    std::cout << "  │              🔍 No transactions match your criteria                │" << std::endl;
-    std::cout << "  ╰────────────────────────────────────────────────────────────────────╯" << std::endl;
+    drawInfoBox("🔍 No transactions match your criteria");
     return;
   }
 
@@ -180,17 +178,15 @@ inline void showSearchScreen() {
   clearScreen();
 
   // Header
-  drawScreenHeader("AI Expense • Search & Filter", true);
+  drawScreenHeader("AI Expense - Search & Filter", true);
   std::cout << std::endl;
 
   // Get all transactions
   std::vector<Transaction> allTransactions = TransactionManager::getAllTransactions();
 
   if (allTransactions.empty()) {
-    std::cout << "  ╭────────────────────────────────────────────────────────────────────╮" << std::endl;
-    std::cout << "  │              📭 No transactions to search!                         │" << std::endl;
-    std::cout << "  │         Add some transactions first.                              │" << std::endl;
-    std::cout << "  ╰────────────────────────────────────────────────────────────────────╯" << std::endl;
+    drawInfoBox("📭 No transactions to search!",
+                "   Add some transactions first.");
     
     drawNavFooter();
     drawPrompt("Press ENTER to go back");
@@ -200,10 +196,8 @@ inline void showSearchScreen() {
   }
 
   // Info box
-  std::cout << "  ╭────────────────────────────────────────────────────────────────────╮" << std::endl;
-  std::cout << "  │  🔍 Search and filter your transactions                            │" << std::endl;
-  std::cout << "  │     Use multiple filters to narrow down results.                  │" << std::endl;
-  std::cout << "  ╰────────────────────────────────────────────────────────────────────╯" << std::endl;
+  drawInfoBox("🔍 Search and filter your transactions",
+              "   Use multiple filters to narrow down results.");
   std::cout << std::endl;
 
   drawInfoLine("📊", "Total transactions", std::to_string(allTransactions.size()), 14);
@@ -237,7 +231,7 @@ inline void showSearchScreen() {
   if (choice == "1") {
     // Search by keyword
     clearScreen();
-    drawScreenHeader("AI Expense • Search by Keyword", true);
+    drawScreenHeader("AI Expense - Search by Keyword", true);
     std::cout << std::endl;
 
     std::cout << "  Enter search keyword (searches in description):" << std::endl;
@@ -260,7 +254,7 @@ inline void showSearchScreen() {
   } else if (choice == "2") {
     // Filter by type
     clearScreen();
-    drawScreenHeader("AI Expense • Filter by Type", true);
+    drawScreenHeader("AI Expense - Filter by Type", true);
     std::cout << std::endl;
 
     drawMenuOption("1", "Show only Income", "💰");
@@ -282,7 +276,7 @@ inline void showSearchScreen() {
   } else if (choice == "3") {
     // Filter by category
     clearScreen();
-    drawScreenHeader("AI Expense • Filter by Category", true);
+    drawScreenHeader("AI Expense - Filter by Category", true);
     std::cout << std::endl;
 
     drawMenuOption("1", "Food", "🍔");
@@ -322,7 +316,7 @@ inline void showSearchScreen() {
   } else if (choice == "4") {
     // Filter by amount range
     clearScreen();
-    drawScreenHeader("AI Expense • Filter by Amount", true);
+    drawScreenHeader("AI Expense - Filter by Amount", true);
     std::cout << std::endl;
 
     std::cout << "  Enter amount range (leave blank for no limit):" << std::endl;
@@ -347,7 +341,7 @@ inline void showSearchScreen() {
   } else if (choice == "5") {
     // Filter by date
     clearScreen();
-    drawScreenHeader("AI Expense • Filter by Date", true);
+    drawScreenHeader("AI Expense - Filter by Date", true);
     std::cout << std::endl;
 
     std::cout << "  Enter month to filter (e.g., 'Nov' or 'November'):" << std::endl;
@@ -368,13 +362,11 @@ inline void showSearchScreen() {
   } else if (choice == "6") {
     // Advanced search with multiple filters
     clearScreen();
-    drawScreenHeader("AI Expense • Advanced Search", true);
+    drawScreenHeader("AI Expense - Advanced Search", true);
     std::cout << std::endl;
 
-    std::cout << "  ╭────────────────────────────────────────────────────────────────────╮" << std::endl;
-    std::cout << "  │  ⚙️  Advanced Search - Apply multiple filters                      │" << std::endl;
-    std::cout << "  │     Leave any field blank to skip that filter.                   │" << std::endl;
-    std::cout << "  ╰────────────────────────────────────────────────────────────────────╯" << std::endl;
+    drawInfoBox("⚙️  Advanced Search - Apply multiple filters",
+                "   Leave any field blank to skip that filter.");
     std::cout << std::endl;
 
     // Keyword filter
